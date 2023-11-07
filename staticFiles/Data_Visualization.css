@@ -1,1 +1,95 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .overviewzoomfilter {
+    background-color: #34568B;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .options {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .vis {
+    margin: 0 100px;
+  }
+  
+  .vis a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+  }
+  
+  .vis a:hover {
+    color: brown;
+    border-radius: 100px;
+    transition: all 0.3s ease 0s;
+    filter: brightness(150%);
+  }
+
+  .vis.current a {
+    color: yellow;
+  }
+
+  .submitstate {
+    display: none;
+}
+
+h1 {
+    padding-top: 30px;
+    justify-content: center;
+    text-align: center;
+}
+
+.correlationquestions {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 30px;
+    justify-content: left;
+    text-align: left;
+}
+
+.filterflex {
+    display: flex;
+    height: 100%;
+}
+  
+.statebox, .yearbox {
+    flex: 1; 
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #333;
+}
+
+.stateflex {
+    display: flex;
+}
+  
+.singlestatebox {
+    flex: left; 
+    text-align: center;
+}
+
+.comparestatebox {
+    flex: right; 
+    text-align: right;
+    padding-left: 300px;
+}
+
+.charttype {
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
+#plot-container {
+  padding-top: 20px;
+  padding-left: 30px;
+}
+
 
