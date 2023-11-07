@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/staticFiles/Data_Visualization.css">
+  <title>Mean SAT vs College Completion Rate</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src= 
+"https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"> 
+    </script> 
+    <script src= 
+    "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.1/chart.min.js">
+    </script> 
+</head>
+<body>
+  <div class="overviewzoomfilter">
+    <div class="options">
+      <div class="vis"><a href="{{ url_for('overview') }}">Overview</a></div>
+      <div class="vis"><a href="{{ url_for('zoom') }}">Zoom</a></div>
+      <div class="vis current"><a href="{{ url_for('filter') }}">Filter</a></div>
+    </div>
+  </div>
+
+
+  <div class="filterflex">
+    <div class="statebox">
+        <h1> Metrics By State </h1>
+        <form id="stateform" method="GET" action="/singlestate">
+        <div class="charttype">
+            <label for="chartview"><b>Chart view:</b></label>
+            <select id="chartview" name="view">
+              {% for cview in chart_view %}
+              <option value="{{ cview }}" {% if cview == view %} selected {% endif %}>{{ cview }}</option>
+              {% endfor %}
+            </select>
+            <input type="submit" id="submitstate" value="Visualize"/>
+        </div>
+        <div class="stateflex">
+            <div class="singlestatebox">
+                
+                  <label for="states"><b>Select a State:</b></label>
+                  <select id="states" name="states">
+                    {% for state in states %}
+                    <option value="{{ state }}" {% if state == current_state %} selected {% endif %}>{{ state }}</option>
+                    {% endfor %}
+                  </select>
+            </div>
+            <div class="comparestatebox">
+                  <label for="statescompare", id="statescomparelabel"><b>Compare with:</b></label>
+                  <select id="statescompare" name="statescompare">
+                    {% for state in states %}
+                    <option value="{{ state }}" {% if state == current_compare_state %} selected {% endif %}>{{ state }}</option>
+                    {% endfor %}
+                  </select>
+                  
+            </div>
+        </div>
+        <div id="plot-container">
+        </div>
+        <canvas id="stackedChartID"></canvas> 
+      </form>
+    </div>
+    <div class="yearbox">
+        <h1> Metrics By Year</h1>
+        <label for="years">Select a Year:</label>
+        <select id="years">
+          {% for year in years %}
+          <option value="{{ year }}">{{ year }}</option>
+          {% endfor %}
+        </select>
+    </div>
+  </div>
+
+  <script>
+       var plotData = {{ plot_data|tojson|safe }};
+       var viewData = {{ view | tojson | safe }};
+
+      // Create the Plotly chart using the parsed data
+      if (JSON.stringify(plotData) !== '{}') {
+      if (viewData == 'Multi Line graph') {
+        var trace1 = {
+          x: plotData.x,
+          y: plotData.y1,
+          mode: 'bar',
+          name: 'Mean SAT scores: ' + String(plotData.state),
+          yaxis: 'y1'
+      };
+
+      var trace2 = {
+          x: plotData.x,
+          y: plotData.y2,
+          mode: 'bar',
+          name: 'College Completion Rates: ' + String(plotData.state),
+          yaxis: 'y2'
+      };
+     
+      var data = [trace1, trace2];
+      if (plotData.hasOwnProperty('yc1')) {
+          var trace3 = {
+            x: plotData.x,
+            y: plotData.yc1,
+            mode: 'bar',
+            name: 'Mean SAT scores: ' + String(plotData.state2),
+            yaxis: 'y1'
+        };
+
+        var trace4 = {
+            x: plotData.x,
+            y: plotData.yc2,
+            mode: 'bar',
+            name: 'College Completion Rates: ' + String(plotData.state2),
+            yaxis: 'y2'
+        };
+        data.push(trace3);
+        data.push(trace4);
+      }
+    
+
+      var layout = {
+                title: 'Mean SAT and College Completion Rate Trends',
+                xaxis: { title: 'Year', automargin: true, dtick: 1},
+                yaxis: { title: 'Mean SAT Scores', side: 'left', automargin: true, showline: true },
+                yaxis2: { title: 'College Completion Rates', overlaying: 'y', side: 'right', automargin: true, showline: true},
+                legend: { x: 1.2, xanchor: 'left', y: 1 },
+                barmode: 'group'
+            };
+        
+        Plotly.newPlot(document.getElementById('plot-container'), data, layout);
+      } else {
+        if (plotData.hasOwnProperty('state2')) {
+        maxY = Math.max(...plotData.y1)
+        minY = Math.min(...plotData.y1)
+
+        maxY2 = Math.max(...plotData.y2)
+        minY2 = Math.min(...plotData.y2)
+        var trace1 = {
+            x: plotData.x,
+            y: plotData.y1,
+            type: 'bar',
+            name: 'Mean SAT scores ' + String(plotData.state),
+            yaxis: 'y1',
+            offsetgroup: 1
+        };
+
+        var trace2 = {
+            x: plotData.x,
+            y: plotData.y2,
+            type: 'bar',
+            name: 'College Completion Rate ' + String(plotData.state),
+            yaxis: 'y2', 
+            offsetgroup: 2
+        };
+
+        data = [trace1, trace2]
+
+        if (plotData.hasOwnProperty('yc1')) {
+              maxY1c = Math.max(...plotData.yc1);
+              minY1c = Math.min(...plotData.yc1);
+
+              maxY = Math.max(maxY, maxY1c);
+              minY = Math.min(minY, minY1c);
+
+              maxY2c = Math.max(...plotData.yc2);
+              minY2c = Math.min(...plotData.yc2);
+
+              maxY2 = Math.max(maxY2, maxY2c);
+              minY2 = Math.min(minY2, minY2c);
+
+              var trace3 = {
+                x: plotData.x,
+                y: plotData.yc1,
+                type: 'bar',
+                name: 'Mean SAT scores ' + String(plotData.state2),
+                yaxis: 'y1',
+                offsetgroup: 3
+            };
+
+            var trace4 = {
+                x: plotData.x,
+                y: plotData.yc2,
+                type: 'bar',
+                name: 'College Completion Rate ' + String(plotData.state2),
+                yaxis: 'y2',
+                offsetgroup: 4
+            };
+
+            data = [trace1, trace3, trace2, trace4];
+          }
+
+        var layout = {
+          title: 'Mean SAT and College Completion Rate Trends',
+          xaxis: { title: 'Year', automargin: true, dtick: 1},
+          yaxis: { title: 'Mean SAT Scores', side: 'left', automargin: true, showline: true, range: [minY - 10, maxY + 10]},
+          yaxis2: { title: 'College Completion Rates', overlaying: 'y', side: 'right', automargin: true, showline: true, range: [minY2 - 2, maxY2 + 2]},
+          legend: { x: 1.2, xanchor: 'left', y: 1 },
+          barmode: 'group'
+        };
+
+        // Plot the chart using Plotly.newPlot
+        Plotly.newPlot('plot-container', data, layout);
+      } else {
+        var myContext = document.getElementById( 
+          "stackedChartID").getContext('2d'); 
+  
+        var myChart = new Chart(myContext, { 
+            type: 'bar', 
+            data: { 
+                labels: plotData.x, 
+                datasets: [{ 
+                    label: 'Critical Reading', 
+                    backgroundColor: "blue", 
+                    data: plotData.reading, 
+                    yAxisID: 'A',
+                    stack: 'Stack 0'
+                }, { 
+                    label: 'Mathematics', 
+                    backgroundColor: "green", 
+                    data: plotData.math, 
+                    yAxisID: 'A',
+                    stack: 'Stack 0'
+                }, { 
+                    label: 'College Completion Rate', 
+                    backgroundColor: "red", 
+                    data: plotData.y2, 
+                    yAxisID: 'B',
+                    stack: 'Stack 1'
+                }], 
+            }, 
+            options: { 
+                plugins: { 
+                    title: { 
+                        display: true, 
+                        text: 'Mean SAT and College Completion Rate Trends' 
+                    }, 
+                }, 
+                scales: { 
+                  x: [{
+                    stacked: true,
+                    title: {
+                          display: true,
+                          text: 'Years',
+                        },
+                  }],
+                  A: {
+                      stacked: true,
+                      position: 'left',
+                      title: {
+                          display: true,
+                          text: 'Mean SAT scores',
+                        }
+                    }, 
+                  B: {
+                    stacked: false,
+                      position: 'right',
+                      ticks: {
+                        callback: function(value, index, ticks) {
+                        return value + '%';
+                    }
+                       },
+                       title: {
+                          display: true,
+                          text: 'College Completion Rates',
+                        }
+                    }
+                }, 
+                responsive: true 
+            } 
+        }); 
+      }
+      }
+    }
+        
+
+      
+  </script>
+  
+
+
+  <script src="/staticFiles/Data_Visualization.js"></script>
+</body>
+</html>

@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/staticFiles/Data_Visualization.css">
+  <title>Mean SAT vs College Completion Rate</title>
+</head>
+<body>
+  <div class="overviewzoomfilter">
+    <div class="options">
+      <div class="vis current"><a href="{{ url_for('overview') }}">Overview</a></div>
+      <div class="vis"><a href="{{ url_for('zoom') }}">Zoom</a></div>
+      <div class="vis"><a href="{{ url_for('filter') }}">Filter</a></div>
+    </div>
+  </div>
 
+  <h1> Is The SAT A Genuine Indicator Of College Success? </h1>
+
+  <div class="correlationquestions">
+  <h2>1. How did the correlation between SAT scores and College Completion Rates vary across the years?</h2>
+  <p> <b>Objective</b>: To generate this visualization, at each recorded year, we computed the correlation between the SAT scores and the College Completion Rates between all states in that year. 
+    We then generated a line graph that seeks to visualize the trend in the correlation scores - is the correlation getting stronger? weaker? staying about the same? By visualizing this trend,
+    we are likely to gain insights into the possibility of the SAT either improving or declining as a performance metric in indicating college success.</p>
+  </div>  
+  
+  <div class="correlationquestions">
+  <h2>2. How did the correlation between SAT scores and College Completion Rates vary across different states?</h2>
+  <p> <b>Objective</b>: To generate this visualization, for each of the 50 states, we computed the correlation between the SAT scores and the College Completion Rates across all recorded years. 
+    We then generated a scatter plot that seeks to visualize the possibility of outliers - are the most affluent and populous states contributing disproportionately into indicating that the SAT is a 
+    genuine indicator? What states seem to show negative correlation and why does the SAT not prove effective for such states? </p>
+  </div>
+
+  <script src="/staticFiles/Data_Visualization.js"></script>
+</body>
+</html>

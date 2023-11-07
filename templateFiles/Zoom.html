@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/staticFiles/Data_Visualization.css">
+  <title>Mean SAT vs College Completion Rate</title>
+</head>
+<body>
+  <div class="overviewzoomfilter">
+    <div class="options">
+      <div class="vis"><a href="{{ url_for('overview') }}">Overview</a></div>
+      <div class="vis current"><a href="{{ url_for('zoom') }}">Zoom</a></div>
+      <div class="vis"><a href="{{ url_for('filter') }}">Filter</a></div>
+    </div>
+  </div>
+
+  <h1> What Could Explain The Correlation Trends? </h1>
+
+  <div class="correlationquestions">
+  <h2>1. How did the Mean SAT scores vary across the years?</h2>
+  <p> <b>Objective</b>: To generate this visualization, at each recorded year, we computed a multiple box plot of the Mean SAT scores of all states in that year. 
+    We seek to visualize the movement of certain statistics pertaining to the Mean SAT scores for all states - the median, quartiles, and outliers.
+    we are likely to gain insights into how the variation in Mean SAT scores across years have affected the overall view of the correlation scores.</p>
+  </div>  
+  
+  <div class="correlationquestions">
+  <h2>2. How did the College Completion Rates vary across the years?</h2>
+  <p> <b>Objective</b>: To generate this visualization, at each recorded year, we computed a multiple box plot of the College Completion Rates of all states in that year. 
+    We seek to visualize the movement of certain statistics pertaining to the College Completion Rates for all states - the median, quartiles, and outliers.
+    we are likely to gain insights into how the variation in College Completion Rates across years have affected the overall view of the correlation scores.</p>
+  </div>
+
+  <script src="/staticFiles/Data_Visualization.js"></script>
+</body>
+</html>
