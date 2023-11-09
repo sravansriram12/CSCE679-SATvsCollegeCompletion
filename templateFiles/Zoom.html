@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/staticFiles/Data_Visualization.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <title>Mean SAT vs College Completion Rate</title>
 </head>
 <body>
@@ -22,6 +24,40 @@
   <p> <b>Objective</b>: To generate this visualization, at each recorded year, we computed a multiple box plot of the Mean SAT scores of all states in that year. 
     We seek to visualize the movement of certain statistics pertaining to the Mean SAT scores for all states - the median, quartiles, and outliers.
     we are likely to gain insights into how the variation in Mean SAT scores across years have affected the overall view of the correlation scores.</p>
+
+    <div id="box-plots"></div>
+    <script>
+      var mean_sat_2009 = {{mean_sat_2009|tojson|safe}};
+      var mean_sat_2010 = {{mean_sat_2010|tojson|safe}};
+      var mean_sat_2011 = {{mean_sat_2011|tojson|safe}};
+      var mean_sat_2012 = {{mean_sat_2012|tojson|safe}};
+      var mean_sat_2013 = {{mean_sat_2013|tojson|safe}};
+      var mean_sat_2014 = {{mean_sat_2014|tojson|safe}};
+      var mean_sat_2015 = {{mean_sat_2015|tojson|safe}};
+      var mean_sat_2016 = {{mean_sat_2016|tojson|safe}};
+      // Sample data for multiple box plots
+      var data = [
+          { y: mean_sat_2009, type: 'box', name: '2009' },
+          { y: mean_sat_2010, type: 'box', name: '2010' },
+          { y: mean_sat_2011, type: 'box', name: '2011' },
+          { y: mean_sat_2012, type: 'box', name: '2012' },
+          { y: mean_sat_2013, type: 'box', name: '2013' },
+          { y: mean_sat_2014, type: 'box', name: '2014' },
+          { y: mean_sat_2015, type: 'box', name: '2015' },
+          { y: mean_sat_2016, type: 'box', name: '2016' }
+          // Add more traces as needed
+      ];
+  
+      // Creating layout
+      var layout = {
+          title: 'Mean SAT score across years',
+          xaxis: { title: 'Year' },
+          yaxis: { title: 'Mean SAT score' }
+      };
+  
+      // Plotting the multiple box plots
+      Plotly.newPlot('box-plots', data, layout);
+  </script>
   </div>  
   
   <div class="correlationquestions">
@@ -29,6 +65,39 @@
   <p> <b>Objective</b>: To generate this visualization, at each recorded year, we computed a multiple box plot of the College Completion Rates of all states in that year. 
     We seek to visualize the movement of certain statistics pertaining to the College Completion Rates for all states - the median, quartiles, and outliers.
     we are likely to gain insights into how the variation in College Completion Rates across years have affected the overall view of the correlation scores.</p>
+    <div id="box-plots_1"></div>
+    <script>
+      var college_comp_2009 = {{college_comp_2009|tojson|safe}};
+      var college_comp_2010 = {{college_comp_2010|tojson|safe}};
+      var college_comp_2011 = {{college_comp_2011|tojson|safe}};
+      var college_comp_2012 = {{college_comp_2012|tojson|safe}};
+      var college_comp_2013 = {{college_comp_2013|tojson|safe}};
+      var college_comp_2014 = {{college_comp_2014|tojson|safe}};
+      var college_comp_2015 = {{college_comp_2015|tojson|safe}};
+      var college_comp_2016 = {{college_comp_2016|tojson|safe}};
+      // Sample data for multiple box plots
+      var data = [
+          { y: college_comp_2009, type: 'box', name: '2009' },
+          { y: college_comp_2010, type: 'box', name: '2010' },
+          { y: college_comp_2011, type: 'box', name: '2011' },
+          { y: college_comp_2012, type: 'box', name: '2012' },
+          { y: college_comp_2013, type: 'box', name: '2013' },
+          { y: college_comp_2014, type: 'box', name: '2014' },
+          { y: college_comp_2015, type: 'box', name: '2015' },
+          { y: college_comp_2016, type: 'box', name: '2016' }
+          // Add more traces as needed
+      ];
+  
+      // Creating layout
+      var layout = {
+          title: 'College completion rates across years',
+          xaxis: { title: 'Year' },
+          yaxis: { title: 'College Completion rate' }
+      };
+  
+      // Plotting the multiple box plots
+      Plotly.newPlot('box-plots_1', data, layout);
+  </script>
   </div>
 
   <script src="/staticFiles/Data_Visualization.js"></script>

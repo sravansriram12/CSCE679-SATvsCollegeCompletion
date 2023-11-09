@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/staticFiles/Data_Visualization.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <title>Mean SAT vs College Completion Rate</title>
 </head>
 <body>
@@ -16,12 +18,31 @@
   </div>
 
   <h1> Is The SAT A Genuine Indicator Of College Success? </h1>
-
   <div class="correlationquestions">
   <h2>1. How did the correlation between SAT scores and College Completion Rates vary across the years?</h2>
   <p> <b>Objective</b>: To generate this visualization, at each recorded year, we computed the correlation between the SAT scores and the College Completion Rates between all states in that year. 
     We then generated a line graph that seeks to visualize the trend in the correlation scores - is the correlation getting stronger? weaker? staying about the same? By visualizing this trend,
     we are likely to gain insights into the possibility of the SAT either improving or declining as a performance metric in indicating college success.</p>
+
+    <div id="line-chart"></div>
+    <script>
+      var yrs = {{yearss|tojson|safe}};
+      var listt = {{ls1|tojson|safe}};
+      var trace1 = {
+        x: yrs,
+        y: listt,
+        mode: 'lines',
+        name: 'SAT Mean'
+      };
+
+      var layout = {
+        title: 'Average correlation between SAT score and completion rate across years',
+        xaxis: { title: 'Years' },
+        yaxis: { title: 'Correlation' },
+      };
+      var dataArr = [trace1];
+      Plotly.newPlot('line-chart', dataArr, layout);
+    </script>
   </div>  
   
   <div class="correlationquestions">
@@ -30,6 +51,25 @@
     We then generated a scatter plot that seeks to visualize the possibility of outliers - are the most affluent and populous states contributing disproportionately into indicating that the SAT is a 
     genuine indicator? What states seem to show negative correlation and why does the SAT not prove effective for such states? </p>
   </div>
+  <div id="scatter-plot"></div>
+  <script>
+    var listt = {{ls2|tojson|safe}};
+    var trace1 = {
+      x: listt,
+      mode: 'scatter',
+      name: 'SAT Mean',
+      mode: 'markers',
+      marker: { size: 20 }
+    };
+
+    var layout = {
+      title: 'Average correlation for states',
+      xaxis: { title: 'Correlation values' },
+      yaxis: { showticklabels: false }
+    };
+    var dataArr = [trace1];
+    Plotly.newPlot('scatter-plot', dataArr, layout);
+  </script>
 
   <script src="/staticFiles/Data_Visualization.js"></script>
 </body>
