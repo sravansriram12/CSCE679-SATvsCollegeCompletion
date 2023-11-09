@@ -84,7 +84,11 @@
           y: plotData.y1,
           mode: 'bar',
           name: 'Mean SAT scores: ' + String(plotData.state),
-          yaxis: 'y1'
+          yaxis: 'y1',
+          line: {
+            color: '#eb101b',
+            width: 3
+          }
       };
 
       var trace2 = {
@@ -92,7 +96,11 @@
           y: plotData.y2,
           mode: 'bar',
           name: 'College Completion Rates: ' + String(plotData.state),
-          yaxis: 'y2'
+          yaxis: 'y2',
+          line: {
+            color: '#05f50d',
+            width: 3
+          }
       };
      
       var data = [trace1, trace2];
@@ -102,7 +110,11 @@
             y: plotData.yc1,
             mode: 'bar',
             name: 'Mean SAT scores: ' + String(plotData.state2),
-            yaxis: 'y1'
+            yaxis: 'y1',
+            line: {
+            color: '#f79297',
+            width: 3
+          }
         };
 
         var trace4 = {
@@ -110,7 +122,11 @@
             y: plotData.yc2,
             mode: 'bar',
             name: 'College Completion Rates: ' + String(plotData.state2),
-            yaxis: 'y2'
+            yaxis: 'y2',
+            line: {
+            color: '#a6f5a9',
+            width: 3
+          }
         };
         data.push(trace3);
         data.push(trace4);
@@ -140,7 +156,10 @@
             type: 'bar',
             name: 'Mean SAT scores ' + String(plotData.state),
             yaxis: 'y1',
-            offsetgroup: 1
+            offsetgroup: 1,
+            marker: {
+            color: '#eb101b'
+          }
         };
 
         var trace2 = {
@@ -149,7 +168,10 @@
             type: 'bar',
             name: 'College Completion Rate ' + String(plotData.state),
             yaxis: 'y2', 
-            offsetgroup: 2
+            offsetgroup: 2,
+            marker: {
+            color: '#05f50d'
+          }
         };
 
         data = [trace1, trace2]
@@ -173,7 +195,10 @@
                 type: 'bar',
                 name: 'Mean SAT scores ' + String(plotData.state2),
                 yaxis: 'y1',
-                offsetgroup: 3
+                offsetgroup: 3,
+                marker: {
+                  color: '#f79297'
+                }
             };
 
             var trace4 = {
@@ -182,7 +207,10 @@
                 type: 'bar',
                 name: 'College Completion Rate ' + String(plotData.state2),
                 yaxis: 'y2',
-                offsetgroup: 4
+                offsetgroup: 4,
+                marker: {
+                  color: '#a6f5a9'
+                }
             };
 
             data = [trace1, trace3, trace2, trace4];
@@ -209,19 +237,19 @@
                 labels: plotData.x, 
                 datasets: [{ 
                     label: 'Critical Reading', 
-                    backgroundColor: "blue", 
+                    backgroundColor: "#ac0de0", 
                     data: plotData.reading, 
                     yAxisID: 'A',
                     stack: 'Stack 0'
                 }, { 
                     label: 'Mathematics', 
-                    backgroundColor: "green", 
+                    backgroundColor: "#f5350a", 
                     data: plotData.math, 
                     yAxisID: 'A',
                     stack: 'Stack 0'
                 }, { 
                     label: 'College Completion Rate', 
-                    backgroundColor: "red", 
+                    backgroundColor: "#05f50d", 
                     data: plotData.y2, 
                     yAxisID: 'B',
                     stack: 'Stack 1'
@@ -240,7 +268,7 @@
                     title: {
                           display: true,
                           text: 'Years',
-                        },
+                        }
                   }],
                   A: {
                       stacked: true,
@@ -248,6 +276,10 @@
                       title: {
                           display: true,
                           text: 'Mean SAT scores',
+                        },
+                        ticks: {
+                            suggestedMin: 400,
+                            suggestedMax: 1600
                         }
                     }, 
                   B: {
