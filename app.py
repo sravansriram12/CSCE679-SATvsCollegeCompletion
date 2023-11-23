@@ -7,6 +7,15 @@ app = Flask(__name__, template_folder='templateFiles', static_folder='staticFile
 dataset = None
 dataset = pd.read_csv('MergedDataset.csv')
 
+import pandas as pd
+
+
+
+
+
+
+
+
 @app.route("/")
 def hello():
     years = dataset['Year'].unique()
@@ -68,7 +77,7 @@ def hello():
         #print(f'Year: {year}, Pearson\'s correlation coefficient: {ls}')
 
 
-    return render_template('Overview.html', yearss= years.tolist(), ls1=ls, ls2=lss)
+    return render_template('Overview.html', yearss= years.tolist(), ls1=ls, states = states.tolist(), ls2=lss)
 
 
 @app.route("/overview")
@@ -100,7 +109,7 @@ def overview():
                 year_data = year_data.drop(index)
 
         correlation_coefficient, p_value = pearsonr(year_data['SAT Mean'], year_data['Total Completion (%)'])
-        print(correlation_coefficient)
+        #print(correlation_coefficient)
         ls.append(correlation_coefficient)
         #print(f'Year: {year}, Pearson\'s correlation coefficient: {ls}')
 
@@ -121,7 +130,7 @@ def overview():
             try:
                 sat_mean = float(row['SAT Mean'])
                 total_completion = float(row['Total Completion (%)'])
-                print(sat_mean, "  ",total_completion)
+                #print(sat_mean, "  ",total_completion)
                 if math.isnan(sat_mean) or math.isnan(total_completion) :
                     state_data = state_data.drop(index)
             except ValueError:
@@ -134,7 +143,7 @@ def overview():
         #print(f'Year: {year}, Pearson\'s correlation coefficient: {ls}')
 
 
-    return render_template('Overview.html', yearss= years.tolist(), ls1=ls, ls2=lss)
+    return render_template('Overview.html', yearss= years.tolist(), ls1=ls, states = states.tolist(), ls2=lss)
 
 @app.route("/zoom")
 def zoom():
@@ -264,4 +273,4 @@ def singlestate():
         return render_template('Filter.html', show_content=True, states=states, chart_view=chart_view, years=years, current_state=selected_state, current_compare_state=compare_state, plot_data=plot_data, view=view)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="0.0.0.0", port=80, debug=True)

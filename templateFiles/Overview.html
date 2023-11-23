@@ -54,11 +54,13 @@
   <div id="scatter-plot"></div>
   <script>
     var listt = {{ls2|tojson|safe}};
+    var states = {{states|tojson|safe}};
     var trace1 = {
       x: listt,
       mode: 'scatter',
       name: 'SAT Mean',
       mode: 'markers',
+      text: states,
       marker: { size: 20 }
     };
 
