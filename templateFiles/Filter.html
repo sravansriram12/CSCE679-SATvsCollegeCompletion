@@ -71,7 +71,7 @@
 
 
   <script>
-    Plotly.d3.csv('../staticFiles/MergedDataset.csv', function(err, rows) {
+    Plotly.d3.csv('https://raw.githubusercontent.com/sravansriram12/CSCE679-SATvsCollegeCompletion/main/staticFiles/MergedDataset.csv?token=GHSAT0AAAAAACJ75UXJUOQ5NSSRZUI3JJF6ZK73E6A', function(err, rows) {
         function unpack(rows, key) {
             return rows.map(function(row) { return row[key]; });
         }
