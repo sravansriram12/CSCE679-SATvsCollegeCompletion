@@ -157,7 +157,7 @@ padding-bottom: 20px;
 
 .singlestatebox select:hover,
 .singlestatebox select:focus {
-  border-bottom: 2px solid #2980b9;
+  border-bottom: 2px solid #3498db;
 }
 
 .singlestatebox::before { /* Unicode character for a down arrow */
@@ -180,7 +180,7 @@ padding-bottom: 20px;
   padding: 5px;
   font-size: 12px;
   color: #333;
-  border-bottom: 2px solid #2ecc71;
+  border-bottom: 2px solid #3498db;
   outline: none;
   transition: border-bottom 0.3s ease;
   cursor: pointer;
@@ -188,7 +188,7 @@ padding-bottom: 20px;
 
 .comparestatebox select:hover,
 .comparestatebox select:focus {
-  border-bottom: 2px solid #2ecc71;
+  border-bottom: 2px solid #3498db;
 }
 
 .comparestatebox::before {
