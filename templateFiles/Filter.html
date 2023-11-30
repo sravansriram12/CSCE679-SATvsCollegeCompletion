@@ -6,12 +6,12 @@
   <link rel="stylesheet" href="/staticFiles/Data_Visualization.css">
   <title>Mean SAT vs College Completion Rate</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src= 
-"https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"> 
-    </script> 
-    <script src= 
+  <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js">
+    </script>
+    <script src=
     "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.1/chart.min.js">
-    </script> 
+    </script>
     <!-- <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script> -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
 </head>
@@ -31,7 +31,7 @@
         <form id="stateform" method="GET" action="/singlestate">
         <div class="charttype">
             <label for="chartview"><b>Chart view:</b></label>
-            <select id="chartview" name="view">
+            <select class="dropdown1" id="chartview" name="view">
               {% for cview in chart_view %}
               <option value="{{ cview }}" {% if cview == view %} selected {% endif %}>{{ cview }}</option>
               {% endfor %}
@@ -40,7 +40,7 @@
         </div>
         <div class="stateflex">
             <div class="singlestatebox">
-                
+
                   <label for="states"><b>Select a State:</b></label>
                   <select id="states" name="states">
                     {% for state in states %}
@@ -52,26 +52,31 @@
                   <label for="statescompare", id="statescomparelabel"><b>Compare with:</b></label>
                   <select id="statescompare" name="statescompare">
                     {% for state in states %}
-                    <option value="{{ state }}" {% if state == current_compare_state %} selected {% endif %}>{{ state }}</option>
+                      {% if not (current_state != "Please select a state" and state == current_state) %}
+                        <option value="{{ state }}" {% if state == current_compare_state %} selected {% endif %}>{{ state }}</option>
+                      {% endif %}
                     {% endfor %}
                   </select>
-                  
+
             </div>
         </div>
         <div id="plot-container">
         </div>
-        <canvas id="stackedChartID"></canvas> 
+        <canvas id="stackedChartID"></canvas>
       </form>
     </div>
   </div>
-  <div class="filterflex">
-  <div id="graph"></div>
-  <div id="graph1"></div>
+  <div class="yearbox">
+  <h1 style="text-align: center;">Metrics By Year</h1>
+    <div class="filterflex2">
+    <div id="graph"></div>
+    <div id="graph1"></div>
+  </div>
   </div>
 
 
   <script>
-    Plotly.d3.csv('../staticFiles/MergedDataset.csv', function(err, rows) {
+   Plotly.d3.csv('https://raw.githubusercontent.com/sravansriram12/SATDataset/main/MergedDataset.csv', function(err, rows) {
         function unpack(rows, key) {
             return rows.map(function(row) { return row[key]; });
         }
@@ -169,7 +174,7 @@
         }));
 
         var layout1 = {
-            title: `College Completion rate`,
+            title: `College Completion Rate`,
             geo: {
                 scope: 'usa',
                 showlakes: true,
@@ -191,37 +196,6 @@
         });
     });
   </script>
-
-<script>
-    var layout = {
-      title: '2009 US Agriculture Exports by State',
-      geo:{
-        scope: 'usa',
-        showlakes: true,
-        lakecolor: 'rgb(255,255,255)'
-      },
-      xaxis: {autorange: false},
-      yaxis: {autorange: false},
-      sliders: [{
-        currentvalue: {
-          prefix: 'Year: ',
-        },
-        steps: frames.map(f => ({
-          label: f.name,
-          method: 'animate',
-          args: [[f.name], {frame: {duration: 0}}]
-        }))
-      }]
-    };
-
-    Plotly.plot('graph', {
-      data: data,
-      layout: layout,
-      frames: frames,
-      config: {showLink: false}
-    });
-  });
-  </script> -->
 
   <script>
        var plotData = {{ plot_data|tojson|safe }};
@@ -253,7 +227,7 @@
             width: 3
           }
       };
-     
+
       var data = [trace1, trace2];
       if (plotData.hasOwnProperty('yc1')) {
           var trace3 = {
@@ -282,7 +256,7 @@
         data.push(trace3);
         data.push(trace4);
       }
-    
+
 
       var layout = {
                 title: 'Mean SAT and College Completion Rate Trends',
@@ -292,7 +266,7 @@
                 legend: { x: 1.2, xanchor: 'left', y: 1 },
                 barmode: 'group'
             };
-        
+
         Plotly.newPlot(document.getElementById('plot-container'), data, layout);
       } else {
         if (plotData.hasOwnProperty('state2')) {
@@ -318,7 +292,7 @@
             y: plotData.y2,
             type: 'bar',
             name: 'College Completion Rate ' + String(plotData.state),
-            yaxis: 'y2', 
+            yaxis: 'y2',
             offsetgroup: 2,
             marker: {
             color: '#05f50d'
@@ -379,41 +353,41 @@
         // Plot the chart using Plotly.newPlot
         Plotly.newPlot('plot-container', data, layout);
       } else {
-        var myContext = document.getElementById( 
-          "stackedChartID").getContext('2d'); 
-  
-        var myChart = new Chart(myContext, { 
-            type: 'bar', 
-            data: { 
-                labels: plotData.x, 
-                datasets: [{ 
-                    label: 'Critical Reading', 
-                    backgroundColor: "#ac0de0", 
-                    data: plotData.reading, 
+        var myContext = document.getElementById(
+          "stackedChartID").getContext('2d');
+
+        var myChart = new Chart(myContext, {
+            type: 'bar',
+            data: {
+                labels: plotData.x,
+                datasets: [{
+                    label: 'Critical Reading',
+                    backgroundColor: "#ac0de0",
+                    data: plotData.reading,
                     yAxisID: 'A',
                     stack: 'Stack 0'
-                }, { 
-                    label: 'Mathematics', 
-                    backgroundColor: "#f5350a", 
-                    data: plotData.math, 
+                }, {
+                    label: 'Mathematics',
+                    backgroundColor: "#f5350a",
+                    data: plotData.math,
                     yAxisID: 'A',
                     stack: 'Stack 0'
-                }, { 
-                    label: 'College Completion Rate', 
-                    backgroundColor: "#05f50d", 
-                    data: plotData.y2, 
+                }, {
+                    label: 'College Completion Rate',
+                    backgroundColor: "#05f50d",
+                    data: plotData.y2,
                     yAxisID: 'B',
                     stack: 'Stack 1'
-                }], 
-            }, 
-            options: { 
-                plugins: { 
-                    title: { 
-                        display: true, 
-                        text: 'Mean SAT and College Completion Rate Trends' 
-                    }, 
-                }, 
-                scales: { 
+                }],
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Mean SAT and College Completion Rate Trends'
+                    },
+                },
+                scales: {
                   x: [{
                     stacked: true,
                     title: {
@@ -432,7 +406,7 @@
                             suggestedMin: 400,
                             suggestedMax: 1600
                         }
-                    }, 
+                    },
                   B: {
                     stacked: false,
                       position: 'right',
@@ -446,20 +420,18 @@
                           text: 'College Completion Rates',
                         }
                     }
-                }, 
-                responsive: true 
-            } 
-        }); 
+                },
+                responsive: true
+            }
+        });
       }
       }
     }
-        
 
-      
+
+
   </script>
-  
 
 
-  <script src="/staticFiles/Data_Visualization.js"></script>
 </body>
 </html>

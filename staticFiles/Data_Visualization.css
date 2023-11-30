@@ -1,95 +1,204 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .overviewzoomfilter {
-    background-color: #34568B;
-    padding: 20px 0;
-    text-align: center;
-  }
-  
-  .options {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .vis {
-    margin: 0 100px;
-  }
-  
-  .vis a {
-    text-decoration: none;
-    color: white;
-    font-size: 20px;
-  }
-  
-  .vis a:hover {
-    color: brown;
-    border-radius: 100px;
-    transition: all 0.3s ease 0s;
-    filter: brightness(150%);
-  }
+  margin: 0;
+  font-family: Arial, sans-serif;
+  justify-content: center;
+  align-items: center;
+}
 
-  .vis.current a {
-    color: yellow;
-  }
+.overviewzoomfilter {
+  background-color: #34568B;
+  padding: 20px 0;
+  text-align: center;
+}
 
-  .submitstate {
-    display: none;
+.options {
+  display: flex;
+  justify-content: center;
+}
+
+.vis {
+  margin: 0 100px;
+}
+
+.vis a {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+}
+
+.vis a:hover {
+  color: brown;
+  border-radius: 100px;
+  transition: all 0.3s ease 0s;
+  filter: brightness(150%);
+}
+
+.vis.current a {
+  color: yellow;
+}
+
+.submitstate {
+  display: none;
 }
 
 h1 {
-    padding-top: 30px;
-    justify-content: center;
-    text-align: center;
+  padding-top: 30px;
+  justify-content: center;
+  text-align: center;
 }
 
 .correlationquestions {
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 30px;
-    justify-content: left;
-    text-align: left;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 30px;
+  justify-content: left;
+  text-align: left;
 }
 
 .filterflex {
-    display: flex;
-    height: 100%;
+  display: flex;
+  height: 100%;
 }
-  
+
 .statebox, .yearbox {
-    flex: 1; 
-    padding: 20px;
-    text-align: center;
-    border: 1px solid #333;
+  flex: 1;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #333;
 }
 
 .stateflex {
-    display: flex;
-}
-  
-.singlestatebox {
-    flex: left; 
-    text-align: center;
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
 }
 
-.comparestatebox {
-    flex: right; 
-    text-align: right;
-    padding-left: 300px;
+.singlestatebox {
+  text-align: center;
 }
 
 .charttype {
-    padding-top: 20px;
-    padding-bottom: 30px;
-}
-
-#plot-container {
   padding-top: 20px;
-  padding-left: 30px;
+  padding-bottom: 10px;
 }
 
+#graph {
+  padding-left: 0px;
+  padding-bottom: 20px;
+}
+
+#graph1 {
+padding-bottom: 20px;
+}
+
+.filterflex2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+#submitstate {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.submitstate:hover {
+    background-color: #45a049; /* Darker Green */
+}
+
+.charttype select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  padding: 5px;
+  font-size: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.charttype::before {
+/* Unicode character for a down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+
+.singlestatebox select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 5px;
+  font-size: 12px;
+  color: #333;
+  border-bottom: 2px solid #3498db;
+  outline: none;
+  transition: border-bottom 0.3s ease;
+  cursor: pointer;
+}
+
+.singlestatebox select:hover,
+.singlestatebox select:focus {
+  border-bottom: 2px solid #2980b9;
+}
+
+.singlestatebox::before { /* Unicode character for a down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+
+.comparestatebox select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 5px;
+  font-size: 12px;
+  color: #333;
+  border-bottom: 2px solid #2ecc71;
+  outline: none;
+  transition: border-bottom 0.3s ease;
+  cursor: pointer;
+}
+
+.comparestatebox select:hover,
+.comparestatebox select:focus {
+  border-bottom: 2px solid #2ecc71;
+}
+
+.comparestatebox::before {
+/* Unicode character for a down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 18px;
+  pointer-events: none;
+}
 

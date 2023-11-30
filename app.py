@@ -9,13 +9,6 @@ dataset = pd.read_csv('MergedDataset.csv')
 
 import pandas as pd
 
-
-
-
-
-
-
-
 @app.route("/")
 def hello():
     years = dataset['Year'].unique()
