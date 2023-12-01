@@ -294,14 +294,14 @@ def singlestate():
                     statec_data = statec_data.drop(index)
 
             correlation_coefficient_compare, p_value = pearsonr(statec_data['SAT Mean'], statec_data['Total Completion (%)'])
-            correlation_coefficient_compare = str(correlation_coefficient_compare)
+            correlation_coefficient_compare = str(round(correlation_coefficient_compare, 2))
 
 
         else:
             plot_data['reading'] = list(state_data['Critical reading'])
             plot_data['math'] = list(state_data['Mathematics'])
 
-        correlation_coefficient = str(correlation_coefficient)
+        correlation_coefficient = str(round(correlation_coefficient, 2))
         return render_template('Filter.html', show_content=True, states=states, chart_view=chart_view, years=years, current_state=selected_state, current_compare_state=compare_state, plot_data=plot_data, view=view, cc=correlation_coefficient, cc2=correlation_coefficient_compare)
 
 if __name__ == '__main__':
