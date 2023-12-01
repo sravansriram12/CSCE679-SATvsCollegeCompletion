@@ -215,7 +215,7 @@ def filter():
     years = [
     "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016"
     ]
-    return render_template('Filter.html', show_content=False, states=states, chart_view=chart_view, years=years, plot_data={}, view='')
+    return render_template('Filter.html', show_content=False, states=states, chart_view=chart_view, years=years, current_state='', current_compare_state='', plot_data={}, view='', cc='', cc2='')
 
 @app.route("/singlestate" , methods=['GET', 'POST'])
 def singlestate():
@@ -238,8 +238,27 @@ def singlestate():
     ]
 
     if (selected_state == 'Please select a state'):
-        return render_template('Filter.html', show_content=False, states=states, chart_view=chart_view, years=years, current_state=selected_state, current_compare_state=compare_state, plot_data={}, view=view)
+        return render_template('Filter.html', show_content=False, states=states, chart_view=chart_view, years=years, current_state=selected_state, current_compare_state=compare_state, plot_data={}, view=view, cc='', cc2='')
     else:
+    
+        state_data = dataset[dataset['State'] == selected_state]
+        state_data = state_data.dropna(subset=['SAT Mean', 'Total Completion (%)'])
+
+        state_data['SAT Mean'] = pd.to_numeric(state_data['SAT Mean'], errors='coerce')
+        state_data['Total Completion (%)'] = pd.to_numeric(state_data['Total Completion (%)'], errors='coerce')
+
+        for index, row in state_data.iterrows():
+            try:
+                sat_mean = float(row['SAT Mean'])
+                total_completion = float(row['Total Completion (%)'])
+                if math.isnan(sat_mean) or math.isnan(total_completion) :
+                    state_data = state_data.drop(index)
+            except ValueError:
+                state_data = state_data.drop(index)
+
+        correlation_coefficient, p_value = pearsonr(state_data['SAT Mean'], state_data['Total Completion (%)'])
+        correlation_coefficient_compare = ''
+
         state_data = dataset[dataset['State'] == selected_state]
         x_values = state_data['Year']
         y_values = state_data['SAT Mean']
@@ -250,6 +269,7 @@ def singlestate():
                 'y2': list(y2_values),
                 'state': selected_state
             }
+
         if (compare_state != 'Please select a state'):
             statec_data = dataset[dataset['State'] == compare_state]
             xc_values = statec_data['Year']
@@ -258,12 +278,31 @@ def singlestate():
             plot_data['yc1'] = list(yc_values)
             plot_data['yc2'] = list(yc2_values)
             plot_data['state2'] = compare_state
+
+            statec_data = statec_data.dropna(subset=['SAT Mean', 'Total Completion (%)'])
+
+            statec_data['SAT Mean'] = pd.to_numeric(statec_data['SAT Mean'], errors='coerce')
+            statec_data['Total Completion (%)'] = pd.to_numeric(statec_data['Total Completion (%)'], errors='coerce')
+
+            for index, row in statec_data.iterrows():
+                try:
+                    sat_mean = float(row['SAT Mean'])
+                    total_completion = float(row['Total Completion (%)'])
+                    if math.isnan(sat_mean) or math.isnan(total_completion) :
+                        statec_data = statec_data.drop(index)
+                except ValueError:
+                    statec_data = statec_data.drop(index)
+
+            correlation_coefficient_compare, p_value = pearsonr(statec_data['SAT Mean'], statec_data['Total Completion (%)'])
+            correlation_coefficient_compare = str(correlation_coefficient_compare)
+
+
         else:
             plot_data['reading'] = list(state_data['Critical reading'])
             plot_data['math'] = list(state_data['Mathematics'])
 
-            
-        return render_template('Filter.html', show_content=True, states=states, chart_view=chart_view, years=years, current_state=selected_state, current_compare_state=compare_state, plot_data=plot_data, view=view)
+        correlation_coefficient = str(correlation_coefficient)
+        return render_template('Filter.html', show_content=True, states=states, chart_view=chart_view, years=years, current_state=selected_state, current_compare_state=compare_state, plot_data=plot_data, view=view, cc=correlation_coefficient, cc2=correlation_coefficient_compare)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80, debug=True)

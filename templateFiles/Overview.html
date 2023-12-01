@@ -23,7 +23,7 @@
   <p> <b>Objective</b>: To generate this visualization, at each recorded year, we computed the correlation between the SAT scores and the College Completion Rates between all states in that year. 
     We then generated a line graph that seeks to visualize the trend in the correlation scores - is the correlation getting stronger? weaker? staying about the same? By visualizing this trend,
     we are likely to gain insights into the possibility of the SAT either improving or declining as a performance metric in indicating college success.</p>
-
+    <div style="height:10px"></div>
     <div id="line-chart"></div>
     <script>
       var yrs = {{yearss|tojson|safe}};
@@ -36,7 +36,7 @@
       };
 
       var layout = {
-        title: 'Average correlation between SAT score and completion rate across years',
+        title: 'Average Correlation Between Mean SAT Scores And College Completion Rates Across Time',
         xaxis: { title: 'Years' },
         yaxis: { title: 'Correlation' },
       };
@@ -51,6 +51,7 @@
     We then generated a scatter plot that seeks to visualize the possibility of outliers - are the most affluent and populous states contributing disproportionately into indicating that the SAT is a 
     genuine indicator? What states seem to show negative correlation and why does the SAT not prove effective for such states? </p>
   </div>
+  <div style="height:10px"></div>
   <div id="scatter-plot"></div>
   <script>
     var listt = {{ls2|tojson|safe}};
@@ -65,7 +66,7 @@
     };
 
     var layout = {
-      title: 'Average correlation for states',
+      title: 'Average Correlation Between Mean SAT Scores And College Completion Rates For Each State',
       xaxis: { title: 'Correlation values' },
       yaxis: { showticklabels: false }
     };

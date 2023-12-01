@@ -60,9 +60,10 @@
 
             </div>
         </div>
-        <div id="plot-container">
+        <div style="height:20px;"></div>
+        <div id="plot-container" style="display:none;">
         </div>
-        <canvas id="stackedChartID"></canvas>
+        <canvas id="stackedChartID" style="display:none;"></canvas>
       </form>
     </div>
   </div>
@@ -200,6 +201,9 @@
   <script>
        var plotData = {{ plot_data|tojson|safe }};
        var viewData = {{ view | tojson | safe }};
+       var correlation = {{ cc|tojson|safe }};
+      var s1 = {{ current_state|tojson|safe }};
+      var correlation_string = '[Correlation Scores]   ' + s1 + ': ' + correlation.toString();
 
       // Create the Plotly chart using the parsed data
       if (JSON.stringify(plotData) !== '{}') {
@@ -230,6 +234,9 @@
 
       var data = [trace1, trace2];
       if (plotData.hasOwnProperty('yc1')) {
+          var correlation_compare = {{ cc2|tojson|safe }};
+          var s2 = {{ current_compare_state|tojson|safe }};
+          correlation_string += ', ' + s2 + ': ' + correlation_compare.toString();
           var trace3 = {
             x: plotData.x,
             y: plotData.yc1,
@@ -260,13 +267,32 @@
 
       var layout = {
                 title: 'Mean SAT and College Completion Rate Trends',
+                annotations: [
+                    {
+                        xref: 'paper',
+                        yref: 'paper',
+                        x: 0.6,
+                        y: 1.08,
+                        xanchor: 'center',
+                        yanchor: 'bottom',
+                        text: correlation_string,
+                        showarrow: false,
+                        font: {
+                            family: 'Arial',
+                            size: 14,
+                            color: '#333',
+                        }
+                    }
+                ],
                 xaxis: { title: 'Year', automargin: true, dtick: 1},
                 yaxis: { title: 'Mean SAT Scores', side: 'left', automargin: true, showline: true },
                 yaxis2: { title: 'College Completion Rates', overlaying: 'y', side: 'right', automargin: true, showline: true},
-                legend: { x: 1.2, xanchor: 'left', y: 1 },
+                legend: { x: 1.08, xanchor: 'left', y: 1 },
                 barmode: 'group'
             };
-
+        
+        const plot = document.getElementById('plot-container');
+        plot.style.display = 'block';
         Plotly.newPlot(document.getElementById('plot-container'), data, layout);
       } else {
         if (plotData.hasOwnProperty('state2')) {
@@ -279,7 +305,7 @@
             x: plotData.x,
             y: plotData.y1,
             type: 'bar',
-            name: 'Mean SAT scores ' + String(plotData.state),
+            name: 'Mean SAT scores: ' + String(plotData.state),
             yaxis: 'y1',
             offsetgroup: 1,
             marker: {
@@ -291,7 +317,7 @@
             x: plotData.x,
             y: plotData.y2,
             type: 'bar',
-            name: 'College Completion Rate ' + String(plotData.state),
+            name: 'College Completion Rate: ' + String(plotData.state),
             yaxis: 'y2',
             offsetgroup: 2,
             marker: {
@@ -300,8 +326,14 @@
         };
 
         data = [trace1, trace2]
-
+        var correlation = {{ cc|tojson|safe }};
+        var s1 = {{ current_state|tojson|safe }};
+        var correlation_string = '[Correlation Scores]   ' + s1 + ': ' + correlation.toString();
         if (plotData.hasOwnProperty('yc1')) {
+             var correlation_compare = {{ cc2|tojson|safe }};
+             var s2 = {{ current_compare_state|tojson|safe }};
+             correlation_string += ', ' + s2 + ': ' + correlation_compare.toString();
+
               maxY1c = Math.max(...plotData.yc1);
               minY1c = Math.min(...plotData.yc1);
 
@@ -318,7 +350,7 @@
                 x: plotData.x,
                 y: plotData.yc1,
                 type: 'bar',
-                name: 'Mean SAT scores ' + String(plotData.state2),
+                name: 'Mean SAT scores: ' + String(plotData.state2),
                 yaxis: 'y1',
                 offsetgroup: 3,
                 marker: {
@@ -330,7 +362,7 @@
                 x: plotData.x,
                 y: plotData.yc2,
                 type: 'bar',
-                name: 'College Completion Rate ' + String(plotData.state2),
+                name: 'College Completion Rate: ' + String(plotData.state2),
                 yaxis: 'y2',
                 offsetgroup: 4,
                 marker: {
@@ -340,19 +372,47 @@
 
             data = [trace1, trace3, trace2, trace4];
           }
-
+      
         var layout = {
           title: 'Mean SAT and College Completion Rate Trends',
+          annotations: [
+              {
+                  xref: 'paper',
+                  yref: 'paper',
+                  x: 0.65,
+                  y: 1.05,
+                  xanchor: 'center',
+                  yanchor: 'bottom',
+                  text: correlation_string,
+                  showarrow: false,
+                  font: {
+                      family: 'Arial',
+                      size: 14,
+                      color: '#333',
+                  }
+              }
+          ],
           xaxis: { title: 'Year', automargin: true, dtick: 1},
           yaxis: { title: 'Mean SAT Scores', side: 'left', automargin: true, showline: true, range: [minY - 10, maxY + 10]},
           yaxis2: { title: 'College Completion Rates', overlaying: 'y', side: 'right', automargin: true, showline: true, range: [minY2 - 2, maxY2 + 2]},
-          legend: { x: 1.2, xanchor: 'left', y: 1 },
+          legend: { x: 1.1, xanchor: 'left', y: 1 },
           barmode: 'group'
         };
+
+        const plot = document.getElementById('plot-container');
+        plot.style.display = 'block';
 
         // Plot the chart using Plotly.newPlot
         Plotly.newPlot('plot-container', data, layout);
       } else {
+        const canvas = document.getElementById('stackedChartID');
+        canvas.style.display = 'block';
+
+        var correlation = {{ cc|tojson|safe }};
+        var s1 = {{ current_state|tojson|safe }};
+        var correlation_string = '[Correlation Scores]   ' + s1 + ': ' + correlation.toString();
+
+        const shouldDisplayCanvas = true; 
         var myContext = document.getElementById(
           "stackedChartID").getContext('2d');
 
@@ -386,7 +446,16 @@
                         display: true,
                         text: 'Mean SAT and College Completion Rate Trends'
                     },
+                    subtitle: {
+                      display: true,
+                      text: correlation_string,
+                      font: {
+                          size: 14,
+                          weight: 'normal'
+                      }
+                  }
                 },
+            
                 scales: {
                   x: [{
                     stacked: true,

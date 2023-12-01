@@ -202,3 +202,13 @@ padding-bottom: 20px;
   pointer-events: none;
 }
 
+#plot-container, #stackedChartID, #graph, #graph1, #scatter-plot, #line-chart, #box-plots, #box-plots_1 {
+  width: 80%;
+  border: 1px solid #ddd; /* Add border for better visual separation */
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow for depth */
+  margin: 0 auto;
+  transition: transform 0.3s ease-in-out;
+}
+
