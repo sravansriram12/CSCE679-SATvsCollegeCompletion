@@ -37,7 +37,9 @@
               {% endfor %}
             </select>
             <input type="submit" id="submitstate" value="Visualize"/>
+            <button type="button" id="savevis" onclick="saveVis()" disabled>Save</button>
         </div>
+        
         <div class="stateflex">
             <div class="singlestatebox">
 
@@ -57,8 +59,10 @@
                       {% endif %}
                     {% endfor %}
                   </select>
-
             </div>
+        </div>
+        <div id="keyViews">
+          
         </div>
         <div style="height:20px;"></div>
         <div id="plot-container" style="display:none;">
@@ -74,6 +78,128 @@
     <div id="graph1"></div>
   </div>
   </div>
+
+  <script>
+    function setSavedViews() {
+      var plotData = {{ plot_data|tojson|safe }};
+      if (plotData.hasOwnProperty('state2') && plotData.state2 != 'Please select a state') {
+        console.log(plotData.state2);
+        const saveView = document.getElementById("savevis");
+        saveView.disabled=false;
+      } else {
+        document.getElementById("savevis").disabled=true;
+      }
+      
+      var comparisons = JSON.parse(localStorage.getItem("compareSaves"));
+      if (comparisons != null && comparisons != undefined) {
+        for (var i = 0; i < comparisons.length; i++) {
+          let comparison = comparisons[i];
+          let args = comparison.split("-");
+          var myButton = document.createElement("button");
+          myButton.type = "button";
+          myButton.innerText = args[0] + " vs " + args[1];
+          myButton.id = "savedview"; 
+          myButton.addEventListener("click", function() {
+             
+              args[0] = args[0].replace(/ /g, '+');
+              args[1] = args[1].replace(/ /g, '+');
+              args[2] = args[2].replace(/ /g, '+');
+
+              
+              var url = `/process_saved?states=${args[0]}&statescompare=${args[1]}&view=${args[2]}`;
+              
+              var xhr = new XMLHttpRequest();
+
+              // Define the type of request and the URL
+              xhr.open("GET", url, true);
+              
+              xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+
+                    window.location.href = xhr.responseURL;
+                } else {
+                    // Handle other cases if needed
+                    console.error("Error: " + xhr.status);
+                }
+            };
+
+              xhr.send();
+            });
+          
+          var myDiv = document.getElementById("keyViews");
+          myDiv.appendChild(myButton);
+        }
+      }
+      
+    
+    }
+    window.onload = setSavedViews;
+  </script>
+
+  <script>
+    function saveVis() {
+      var plotData = {{ plot_data|tojson|safe }};
+      var viewData = {{ view | tojson | safe }};
+      
+
+      if (plotData.hasOwnProperty('state2') && plotData.state2 != 'Please select a state' && plotData.state2 != plotData.state) {
+        var comparisons = JSON.parse(localStorage.getItem('compareSaves')); 
+
+        if (comparisons != null && comparisons != undefined) {
+          
+          for (var i = 0; i < comparisons.length; i++) { 
+            if (comparisons[i] === plotData.state + "-" + plotData.state2 + "-" + viewData) {
+              return;
+            }
+          }
+          
+        } 
+        
+        var myButton = document.createElement("button");
+        myButton.type = "button";
+        
+        
+
+        myButton.innerText = plotData.state + " vs " + plotData.state2;
+        
+        if (comparisons != null && comparisons != undefined) {
+          comparisons.push(plotData.state + "-" + plotData.state2 + "-" + viewData);
+        } else {
+          comparisons = [];
+          comparisons.push(plotData.state + "-" + plotData.state2 + "-" + viewData);
+        }
+
+        localStorage.setItem("compareSaves", JSON.stringify(comparisons));
+        myButton.id = "savedview"; 
+
+        myButton.addEventListener("click", function() {
+            let plotData2 = {{ plot_data|tojson|safe }};
+            let viewData2 = {{ view | tojson | safe }};
+            // Make an AJAX request to the Flask backend
+            let url = `/singlestate?states=${encodeURIComponent(plotData2.state)}&statescompare=${encodeURIComponent(plotData2.state2)}&view=${encodeURIComponent(viewData2)}`;
+
+            var xhr = new XMLHttpRequest();
+
+            // Define the type of request and the URL
+            xhr.open("GET", url, true);
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+
+                    window.location.href = xhr.responseURL;
+                } else {
+                    // Handle other cases if needed
+                    console.error("Error: " + xhr.status);
+                }
+            }
+            xhr.send();
+          });
+
+
+        var myDiv = document.getElementById("keyViews");
+        myDiv.appendChild(myButton);
+      }
+    }
+  </script>
 
 
   <script>
@@ -362,7 +488,7 @@
                 yaxis: 'y1',
                 offsetgroup: 3,
                 marker: {
-                  color: '#f79297'
+                  color: '#f79297',
                 }
             };
 
@@ -374,7 +500,7 @@
                 yaxis: 'y2',
                 offsetgroup: 4,
                 marker: {
-                  color: '#a6f5a9'
+                  color: '#a6f5a9',
                 }
             };
 

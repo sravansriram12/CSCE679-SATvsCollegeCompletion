@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 import pandas as pd
 from scipy.stats import pearsonr
 import math
@@ -222,6 +222,9 @@ def singlestate():
     selected_state = request.args.get('states')
     compare_state = request.args.get('statescompare')
     view = request.args.get('view')
+
+    if compare_state == selected_state:
+        compare_state = 'Please select a state'
     
     states = [
         "Please select a state", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
@@ -296,13 +299,16 @@ def singlestate():
             correlation_coefficient_compare, p_value = pearsonr(statec_data['SAT Mean'], statec_data['Total Completion (%)'])
             correlation_coefficient_compare = str(round(correlation_coefficient_compare, 2))
 
-
         else:
             plot_data['reading'] = list(state_data['Critical reading'])
             plot_data['math'] = list(state_data['Mathematics'])
 
         correlation_coefficient = str(round(correlation_coefficient, 2))
         return render_template('Filter.html', show_content=True, states=states, chart_view=chart_view, years=years, current_state=selected_state, current_compare_state=compare_state, plot_data=plot_data, view=view, cc=correlation_coefficient, cc2=correlation_coefficient_compare)
+
+@app.route('/process_saved', methods=['GET'])
+def process_saved_view():
+     return redirect(url_for('singlestate', states=request.args.get('states'), statescompare=request.args.get('statescompare'), view=request.args.get('view')))
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80, debug=True)
