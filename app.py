@@ -6,6 +6,7 @@ import math
 app = Flask(__name__, template_folder='templateFiles', static_folder='staticFiles')
 dataset = None
 dataset = pd.read_csv('MergedDataset.csv')
+dataset1= pd.read_csv('merged_data.csv')
 
 import pandas as pd
 
@@ -215,7 +216,11 @@ def filter():
     years = [
     "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016"
     ]
-    return render_template('Filter.html', show_content=False, states=states, chart_view=chart_view, years=years, current_state='', current_compare_state='', plot_data={}, view='', cc='', cc2='')
+    return render_template('Filter.html', show_content=False, states=states, 
+    chart_view=chart_view, years=years, current_state='', current_compare_state='', 
+    plot_data={}, view='', cc='', cc2='', State = dataset1["State"].tolist(), SAT_mean = dataset1["SAT Mean"].tolist(),
+    CC = dataset1["Total Completion (%)"].tolist(), Population= dataset1["Population"].tolist(),
+    Region = dataset1["Region"].tolist())
 
 @app.route("/singlestate" , methods=['GET', 'POST'])
 def singlestate():
