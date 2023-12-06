@@ -77,6 +77,11 @@
     <div id="graph"></div>
     <div id="graph1"></div>
   </div>
+  <div class="bubblebox">
+    <h1 style="text-align: center;">Metrics By Population and Location</h1>
+    <div class="filterflex2"></div>
+    <div id="bubble-chart"></div>
+  </div>
   </div>
 
   <script>
@@ -201,6 +206,68 @@
     }
   </script>
 
+
+<script>
+  var State = {{ State|tojson|safe }};
+  var CC = {{ CC|tojson|safe }};
+  var SATMean = {{ SAT_mean|tojson|safe }};
+  var region = {{ Region|tojson|safe }};
+  var Population = {{ Population|tojson|safe }};
+
+  var ScaledPopulation = Population.map(value => Math.sqrt(value)* 0.008);
+  var groupedData = {};
+region.forEach((cat, index) => {
+  if (!groupedData[cat]) {
+    groupedData[cat] = { x: [], y: [], size: [] , text: []};
+  }
+  groupedData[cat].x.push(SATMean[index]);
+  groupedData[cat].y.push(CC[index]);
+  groupedData[cat].size.push(ScaledPopulation[index]);
+  groupedData[cat].text.push(State[index]);
+});
+
+// Create traces for each category
+var traces = Object.keys(groupedData).map(cat => {
+  return {
+    x: groupedData[cat].x,
+    y: groupedData[cat].y,
+    mode: 'markers',
+    marker: {
+      size: groupedData[cat].size,
+      sizemode: 'diameter',
+    },
+    type: 'scatter',
+    name: cat,
+    text: groupedData[cat].text, // Set the text for hover
+    font: {
+      size: 16,
+      family: 'Arial, sans-serif',
+      color: 'black', // You can specify the color if needed
+      weight: 'bold',
+    },
+    hoverinfo: 'x+y+text'
+  };
+});
+
+  
+  // Layout configuration
+  var layout = {
+    title: 'Mean SAT vs College Completion % based on population and geographic location',
+    xaxis: {
+      title: 'Mean SAT'
+    },
+    yaxis: {
+      title: 'College Completion %'
+    },
+    margin: {
+    t: 50, 
+  },
+  };
+
+  // Create the bubble chart
+  //Plotly.newPlot('bubble-chart', data, layout);
+  Plotly.newPlot('bubble-chart', traces, layout);
+</script>
 
   <script>
    Plotly.d3.csv('https://raw.githubusercontent.com/sravansriram12/SATDataset/main/MergedDataset.csv', function(err, rows) {

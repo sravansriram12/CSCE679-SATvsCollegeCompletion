@@ -60,7 +60,7 @@ h1 {
   height: 100%;
 }
 
-.statebox, .yearbox {
+.statebox, .yearbox, .bubblebox {
   flex: 1;
   padding: 20px;
   text-align: center;
@@ -91,11 +91,15 @@ h1 {
 padding-bottom: 20px;
 }
 
+#bubble-chart
+{
+  padding-bottom: 20px;
+}
+
 .filterflex2 {
   display: flex;
   justify-content: space-between;
 }
-
 
 #submitstate {
     background-color: #4CAF50; /* Green */
@@ -238,7 +242,7 @@ padding-bottom: 20px;
   pointer-events: none;
 }
 
-#plot-container, #stackedChartID, #graph, #graph1, #scatter-plot, #line-chart, #box-plots, #box-plots_1 {
+#plot-container, #stackedChartID, #bubble-chart, #graph, #graph1, #scatter-plot, #line-chart, #box-plots, #box-plots_1 {
   width: 80%;
   border: 1px solid #ddd; /* Add border for better visual separation */
   border-radius: 4px;
