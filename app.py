@@ -248,7 +248,7 @@ def singlestate():
     if (selected_state == 'Please select a state'):
         return render_template('Filter.html', show_content=False, states=states, chart_view=chart_view, 
         years=years, current_state=selected_state, current_compare_state=compare_state, plot_data={}, 
-        view=view, cc='', cc2=''State = dataset1["State"].tolist(), SAT_mean = dataset1["SAT Mean"].tolist(),
+        view=view, cc='', cc2='', State = dataset1["State"].tolist(), SAT_mean = dataset1["SAT Mean"].tolist(),
         CC = dataset1["Total Completion (%)"].tolist(), Population= dataset1["Population"].tolist(),
         Region = dataset1["Region"].tolist())
     else:
@@ -315,7 +315,7 @@ def singlestate():
         correlation_coefficient = str(round(correlation_coefficient, 2))
         return render_template('Filter.html', show_content=True, states=states, chart_view=chart_view, years=years, 
         current_state=selected_state, current_compare_state=compare_state, plot_data=plot_data, view=view, 
-        cc=correlation_coefficient, cc2=correlation_coefficient_compareState = dataset1["State"].tolist(), SAT_mean = dataset1["SAT Mean"].tolist(),
+        cc=correlation_coefficient, cc2=correlation_coefficient_compare, State = dataset1["State"].tolist(), SAT_mean = dataset1["SAT Mean"].tolist(),
         CC = dataset1["Total Completion (%)"].tolist(), Population= dataset1["Population"].tolist(),
         Region = dataset1["Region"].tolist())
 
